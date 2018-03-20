@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Add param `NeutronOvsAgentCpuShares` to define cgroups `cpu.shares`
+    limits for `neutron_ovs_agent` containers. Defaults to 0 (unlimited).

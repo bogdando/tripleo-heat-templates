@@ -4,6 +4,10 @@ description: >
   OpenStack Neutron openvswitch service
 
 parameters:
+  NeutronOvsAgentCpuShares:
+    description: cgroups limits for cpu.shares
+    type: string
+    default: 0
   DockerOpenvswitchImage:
     description: image
     type: string
@@ -145,6 +149,7 @@ outputs:
             net: host
             pid: host
             privileged: true
+            cpu_shares: {get_param: NeutronOvsAgentCpuShares}
             restart: always
             healthcheck:
               test: /openstack/healthcheck
