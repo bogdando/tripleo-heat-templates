@@ -59,3 +59,4 @@ parameter_defaults:
   DockerPuppetDebug: True
   NotificationDriver: 'noop'
   GlanceBackend: 'file'
+  NeutronOvsAgentCpuShares: 150

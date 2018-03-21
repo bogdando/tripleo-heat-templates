@@ -37,3 +37,4 @@ parameter_defaults:
   Debug: true
   DockerPuppetDebug: True
   NotificationDriver: 'noop'
+  NeutronOvsAgentCpuShares: 150

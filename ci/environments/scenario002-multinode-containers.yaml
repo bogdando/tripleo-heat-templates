@@ -108,3 +108,4 @@ parameter_defaults:
   ZaqarManagementStore: 'sqlalchemy'
   SwiftCeilometerPipelineEnabled: false
   BarbicanSimpleCryptoGlobalDefault: true
+  NeutronOvsAgentCpuShares: 150

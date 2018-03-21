@@ -173,3 +173,4 @@ parameter_defaults:
     - tty4
     - tty5
     - tty6
+  NeutronOvsAgentCpuShares: 150

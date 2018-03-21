@@ -72,3 +72,4 @@ parameter_defaults:
   KeystoneTokenProvider: 'fernet'
   SwiftCeilometerPipelineEnabled: false
   NotificationDriver: 'noop'
+  NeutronOvsAgentCpuShares: 150

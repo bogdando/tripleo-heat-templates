@@ -60,3 +60,4 @@ parameter_defaults:
   GlanceBackend: 'file'
   IronicCleaningDiskErase: 'metadata'
   NotificationDriver: 'noop'
+  NeutronOvsAgentCpuShares: 150
