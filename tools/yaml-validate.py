@@ -831,10 +831,16 @@ def validate(filename, param_map):
                                 },
                                 ...
                            ]}
+    Returns a tuple of the most recent return code (mrrc) and a global flag
+    that indicates any failures had been in the check progress. The latter
+    only indicates when checks executed against the given Heat template file
+    have any failures. While mrrc allows to chain a few checks based on the
+    consequent retval results.
     """
     if args.quiet < 1:
         print('Validating %s' % filename)
     retval = 0
+    has_failures = 0
     try:
         tpl = yaml.load(open(filename).read())
 
@@ -853,7 +859,7 @@ def validate(filename, param_map):
                         ', '.join(valid_heat_template_versions)
                     )
                 )
-                return 1
+                return (1, 1)
             if tpl_template_version != current_heat_template_version:
                 print('Warning: heat_template_version in template %s '
                       'is outdated: %s (current %s)'
@@ -868,22 +874,28 @@ def validate(filename, param_map):
                 filename.startswith('./puppet/services/') and
                 VALIDATE_PUPPET_OVERRIDE.get(filename, True)):
             retval = validate_service(filename, tpl)
+            has_failures |= retval
 
         if re.search(r'(puppet|docker)\/services', filename):
             retval = validate_service_hiera_interpol(filename, tpl)
+            has_failures |= retval
 
         if filename.startswith('./docker/services/logging/'):
             retval = validate_docker_logging_template(filename, tpl)
+            has_failures |= retval
         elif VALIDATE_DOCKER_OVERRIDE.get(filename, False) or (
                 filename.startswith('./docker/services/') and
                 VALIDATE_DOCKER_OVERRIDE.get(filename, True)):
             retval = validate_docker_service(filename, tpl)
+            has_failures |= retval
 
         if filename.endswith('hyperconverged-ceph.yaml'):
             retval = validate_hci_compute_services_default(filename, tpl)
+            has_failures |= retval
 
         if filename.startswith('./roles/ComputeHCI.yaml'):
             retval = validate_hci_computehci_role(filename, tpl)
+            has_failures |= retval
 
         if filename.startswith('./roles/ComputeOvsDpdk.yaml') or \
                 filename.startswith('./roles/ComputeSriov.yaml') or \
@@ -897,32 +909,39 @@ def validate(filename, param_map):
                 'OS::TripleO::Services::Vpp',
                 'OS::TripleO::Services::NeutronLinuxbridgeAgent']
             retval = validate_with_compute_role_services(filename, tpl, exclude)
+            has_failures |= retval
 
         if filename.startswith('./roles/ComputeRealTime.yaml'):
             exclude = [
                 'OS::TripleO::Services::Tuned',
             ]
             retval = validate_with_compute_role_services(filename, tpl, exclude)
+            has_failures |= retval
 
         if filename.startswith('./roles/Hci'):
             retval = validate_hci_role(filename, tpl)
+            has_failures |= retval
 
         if filename.startswith('./roles/Ceph'):
             retval = validate_ceph_role(filename, tpl)
+            has_failures |= retval
 
         if filename.startswith('./roles/ControllerNoCeph.yaml'):
             retval = validate_controller_no_ceph_role(filename, tpl)
+            has_failures |= retval
 
         if filename.startswith('./network_data_'):
             retval = validate_network_data_file(filename)
+            has_failures |= retval
 
         if retval == 0 and is_heat_template:
             # check for old style nic config files
             retval = validate_nic_config_file(filename, tpl)
+            has_failures |= retval
 
     except Exception:
         print(traceback.format_exc())
-        return 1
+        return (1, 1)
     # yaml is OK, now walk the parameters and output a warning for unused ones
     if is_heat_template:
         for p, data in tpl.get('parameters', {}).items():
@@ -945,9 +964,9 @@ def validate(filename, param_map):
                 if 'name' not in data['properties']:
                     print('ERROR: resource %s from %s missing name property.'
                             % (resource, filename))
-                    return 1
+                    return (1, 1)
 
-    return retval
+    return (retval, has_failures)
 
 def validate_upgrade_tasks(upgrade_tasks):
     # some templates define its upgrade_tasks via list_concat
@@ -1037,10 +1056,10 @@ for base_path in path_args:
             for f in files:
                 if f.endswith('.yaml') and not f.endswith('.j2.yaml'):
                     file_path = os.path.join(subdir, f)
-                    failed = validate(file_path, param_map)
-                    if failed:
+                    mrrc, has_failures = validate(file_path, param_map)
+                    if mrrc or has_failures:
                         failed_files.append(file_path)
-                    exit_val |= failed
+                    exit_val |= mrrc or has_failures
                     if f == ENDPOINT_MAP_FILE:
                         base_endpoint_map = get_base_endpoint_map(file_path)
                     if f in envs_containing_endpoint_map:
@@ -1048,10 +1067,10 @@ for base_path in path_args:
                         if env_endpoint_map:
                             env_endpoint_maps.append(env_endpoint_map)
     elif os.path.isfile(base_path) and base_path.endswith('.yaml'):
-        failed = validate(base_path, param_map)
-        if failed:
+        mrrc, has_failures = validate(base_path, param_map)
+        if mrrc or has_failures:
             failed_files.append(base_path)
-        exit_val |= failed
+        exit_val |= mrrc or has_failures
     else:
         print('Unexpected argument %s' % base_path)
         exit_usage()
