@@ -1,0 +1,9 @@
+---
+other:
+  - |
+    Add the `ContainerImagePrepareLogFile` heat parameter, defaults to
+    `/var/log/tripleo-container-image-prepare.log`. It is used to store
+    outputs of the ``openstack tripleo container image prepare`` commands
+    invoked by ansible playbooks for containers registry deployments.
+    As it takes quite a while to finish, make the command to log
+    ``--verbose`` as well.
