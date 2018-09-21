@@ -1,0 +1,36 @@
+---
+# TODO Pods PoC: rework as the side-car containers common steps
+# bind-mounted and executed with reworked docker-puppet.py/ansible inside of each
+# pod's the deployment step-aware containers
+
+########################################################
+# Bootstrap tasks, only performed on bootstrap_server_id
+########################################################
+
+- name: Check if /var/lib/docker-puppet/docker-puppet-tasks{{ step }}.json exists
+  stat:
+    path: /var/lib/docker-puppet/docker-puppet-tasks{{ step }}.json
+  register: docker_puppet_tasks_json
+
+- name: Run docker-puppet tasks (bootstrap tasks) for step {{ step }}
+  shell: python /var/lib/docker-puppet/docker-puppet.py
+  environment:
+    CONFIG: /var/lib/docker-puppet/docker-puppet-tasks{{ step }}.json
+    NET_HOST: "true"
+    NO_ARCHIVE: "true"
+    STEP: "{{ step }}"
+    CONTAINER_CLI: "{{ container_cli | default('docker') }}"
+  when:
+    - deploy_server_id == bootstrap_server_id
+    - docker_puppet_tasks_json.stat.exists
+  changed_when: false
+  check_mode: no
+  register: outputs
+  failed_when: false
+  no_log: true
+
+- name: "Debug output for task which failed: Run docker-puppet tasks (bootstrap tasks) for step {{ step }}"
+  debug:
+    var: outputs.stdout_lines | default([]) | union(outputs.stderr_lines | default([]))
+  when: outputs.rc is defined
+  failed_when: outputs.rc != 0
