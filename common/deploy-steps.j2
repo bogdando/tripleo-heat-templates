@@ -62,8 +62,12 @@ parameters:
     type: json
   ConfigDebug:
     default: false
-    description: Whether to run config management (e.g. Puppet) in debug mode.
+    description: Whether to run config management (e.g. Puppet/Paunch) in debug mode.
     type: boolean
+  PaunchLogFile:
+    default: /var/log/containers/paunch.log
+    description: Log file to store Paunch logs
+    type: string
   EnablePuppet:
     default: true
     description: Whether to run the puppet (baremetal) deployment tasks.
@@ -130,6 +134,7 @@ resources:
         - name: enable_puppet
         - name: docker_puppet_debug
         - name: container_cli
+        - name: paunch_log_file
         - name: docker_puppet_process_count
         - name: role_data_step_config
         - name: role_data_puppet_config
@@ -374,6 +379,7 @@ resources:
         enable_puppet: {get_param: EnablePuppet}
         docker_puppet_debug: {get_param: DockerPuppetDebug}
         container_cli: {get_param: ContainerCli}
+        paunch_log_file: {get_param: PaunchLogFile}
         docker_puppet_process_count: {get_param: DockerPuppetProcessCount}
         role_data_step_config: {get_param: [role_data, {{role.name}}, step_config]}
         role_data_puppet_config: {get_param: [role_data, {{role.name}}, puppet_config]}
@@ -434,6 +440,7 @@ outputs:
             ENABLE_DEBUG: {get_param: ConfigDebug}
             ENABLE_PUPPET: {get_param: EnablePuppet}
             CONTAINER_CLI: {get_param: ContainerCli}
+            PAUNCH_LOG_FILE: {get_param: PaunchLogFile}
             DOCKER_PUPPET_DEBUG: {get_param: DockerPuppetDebug}
             DOCKER_PUPPET_PROCESS_COUNT: {get_param: DockerPuppetProcessCount}
           template: |
@@ -479,6 +486,7 @@ outputs:
                 enable_debug: ENABLE_DEBUG
                 enable_puppet: ENABLE_PUPPET
                 container_cli: CONTAINER_CLI
+                paunch_log_file: PAUNCH_LOG_FILE
                 docker_puppet_debug: DOCKER_PUPPET_DEBUG
                 docker_puppet_process_count: DOCKER_PUPPET_PROCESS_COUNT
               tasks:
@@ -513,6 +521,7 @@ outputs:
                 enable_debug: ENABLE_DEBUG
                 enable_puppet: ENABLE_PUPPET
                 container_cli: CONTAINER_CLI
+                paunch_log_file: PAUNCH_LOG_FILE
                 docker_puppet_debug: DOCKER_PUPPET_DEBUG
                 docker_puppet_process_count: DOCKER_PUPPET_PROCESS_COUNT
               tasks:
@@ -538,6 +547,7 @@ outputs:
                 enable_debug: ENABLE_DEBUG
                 enable_puppet: ENABLE_PUPPET
                 container_cli: CONTAINER_CLI
+                paunch_log_file: PAUNCH_LOG_FILE
                 docker_puppet_debug: DOCKER_PUPPET_DEBUG
                 docker_puppet_process_count: DOCKER_PUPPET_PROCESS_COUNT
               tasks:
@@ -561,6 +571,7 @@ outputs:
                 enable_debug: ENABLE_DEBUG
                 enable_puppet: ENABLE_PUPPET
                 container_cli: CONTAINER_CLI
+                paunch_log_file: PAUNCH_LOG_FILE
                 docker_puppet_debug: DOCKER_PUPPET_DEBUG
                 docker_puppet_process_count: DOCKER_PUPPET_PROCESS_COUNT
               tasks:
@@ -584,6 +595,7 @@ outputs:
                 enable_debug: ENABLE_DEBUG
                 enable_puppet: ENABLE_PUPPET
                 container_cli: CONTAINER_CLI
+                paunch_log_file: PAUNCH_LOG_FILE
                 docker_puppet_debug: DOCKER_PUPPET_DEBUG
                 docker_puppet_process_count: DOCKER_PUPPET_PROCESS_COUNT
               tasks:
@@ -624,6 +636,7 @@ outputs:
                 enable_debug: ENABLE_DEBUG
                 enable_puppet: ENABLE_PUPPET
                 container_cli: CONTAINER_CLI
+                paunch_log_file: PAUNCH_LOG_FILE
                 docker_puppet_debug: DOCKER_PUPPET_DEBUG
                 docker_puppet_process_count: DOCKER_PUPPET_PROCESS_COUNT
               tasks:

@@ -1,0 +1,6 @@
+---
+other:
+  - |
+    Paramter ``PaunchLogFile`` (Defaults to '/var/log/containers/paunch.log')
+    defines the log file path to store Paunch logs when configuring containers.
+    ``ConfigDebug`` also controls the paunch logs verbosity.
