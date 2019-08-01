@@ -136,7 +136,7 @@ outputs:
       # BEGIN DOCKER SETTINGS
       puppet_config:
         config_volume: aodh
-        puppet_tags: aodh_api_paste_ini,aodh_config
+        puppet_tags: aodh_api_paste_ini,aodh_config,apache
         step_config:
           list_join:
             - "\n"

@@ -222,7 +222,7 @@ outputs:
       # BEGIN DOCKER SETTINGS
       puppet_config:
         config_volume: gnocchi
-        puppet_tags: gnocchi_api_paste_ini,gnocchi_config
+        puppet_tags: gnocchi_api_paste_ini,gnocchi_config,apache
         step_config: |
           include ::tripleo::profile::base::gnocchi::api
         config_image: {get_param: ContainerGnocchiConfigImage}

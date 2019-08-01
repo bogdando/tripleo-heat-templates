@@ -658,7 +658,7 @@ outputs:
       # BEGIN DOCKER SETTINGS
       puppet_config:
         config_volume: keystone
-        puppet_tags: keystone_config,keystone_domain_config
+        puppet_tags: keystone_config,keystone_domain_config,apache
         step_config:
           list_join:
             - "\n"

@@ -179,7 +179,7 @@ outputs:
       # BEGIN DOCKER SETTINGS
       puppet_config:
         config_volume: ironic_api
-        puppet_tags: ironic_config
+        puppet_tags: ironic_config,apache
         step_config:
           list_join:
             - "\n"

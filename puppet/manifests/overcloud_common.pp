@@ -25,5 +25,6 @@ if hiera('step') >= 4 {
 
 $package_manifest_name = join(['/var/lib/tripleo/installed-packages/overcloud___ROLE__', hiera('step')])
 package_manifest{$package_manifest_name: ensure => present}
+noop_resource("service")
 
 # End of overcloud_common.pp

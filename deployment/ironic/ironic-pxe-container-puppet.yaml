@@ -52,8 +52,9 @@ outputs:
       # BEGIN DOCKER SETTINGS
       puppet_config:
         config_volume: ironic
-        puppet_tags: ironic_config
-        step_config: ''
+        puppet_tags: ironic_config,apache
+        step_config: |
+          include ::tripleo::profile::base::apache
         config_image: {get_param: ContainerIronicConfigImage}
       kolla_config:
         /var/lib/kolla/config_files/ironic_pxe_http.json:

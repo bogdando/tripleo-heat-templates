@@ -159,7 +159,7 @@ outputs:
       # BEGIN DOCKER SETTINGS
       puppet_config:
         config_volume: heat_api_cfn
-        puppet_tags: heat_config,file,concat,file_line
+        puppet_tags: heat_config,file,concat,file_line,apache
         step_config: |
           include ::tripleo::profile::base::heat::api_cfn
         config_image: {get_param: ContainerHeatApiCfnConfigImage}

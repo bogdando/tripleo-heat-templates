@@ -234,7 +234,7 @@ outputs:
       # BEGIN DOCKER SETTINGS
       puppet_config:
         config_volume: zaqar
-        puppet_tags: zaqar_config
+        puppet_tags: zaqar_config,apache
         step_config:
           list_join:
             - "\n"

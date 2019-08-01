@@ -220,7 +220,7 @@ outputs:
       # BEGIN DOCKER SETTINGS
       puppet_config:
         config_volume: ec2_api
-        puppet_tags: ec2api_api_paste_ini,ec2api_config
+        puppet_tags: ec2api_api_paste_ini,ec2api_config,apache
         step_config:
           list_join:
             - "\n"
@@ -348,7 +348,7 @@ outputs:
             - { 'path': /var/log/containers/ec2_api, 'setype': svirt_sandbox_file_t }
             - { 'path': /var/log/containers/ec2_api_metadata, 'setype': svirt_sandbox_file_t }
             - { 'path': /var/log/ec2_api, 'setype': svirt_sandbox_file_t }
-            - { 'path': /var/log/ec2_api_metadata, 'setype': svirt_sandbox_file_t }            
+            - { 'path': /var/log/ec2_api_metadata, 'setype': svirt_sandbox_file_t }
         - name: ec2_api logs readme
           copy:
             dest: /var/log/{{ item }}/readme.txt

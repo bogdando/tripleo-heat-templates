@@ -158,7 +158,7 @@ outputs:
       # BEGIN DOCKER SETTINGS #
       puppet_config:
         config_volume: manila
-        puppet_tags: manila_config,manila_api_paste_ini
+        puppet_tags: manila_config,manila_api_paste_ini,apache
         step_config:
           list_join:
             - "\n"

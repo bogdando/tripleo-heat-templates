@@ -211,7 +211,7 @@ outputs:
       # BEGIN DOCKER SETTINGS
       puppet_config:
         config_volume: cinder
-        puppet_tags: cinder_config,cinder_type,file,concat,file_line
+        puppet_tags: cinder_config,cinder_type,file,concat,file_line,apache
         step_config:
           list_join:
             - "\n"

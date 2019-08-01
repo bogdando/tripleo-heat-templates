@@ -223,7 +223,7 @@ outputs:
       # BEGIN DOCKER SETTINGS #
       puppet_config:
         config_volume: panko
-        puppet_tags: panko_api_paste_ini,panko_config
+        puppet_tags: panko_api_paste_ini,panko_config,apache
         step_config:
           list_join:
             - "\n"

@@ -208,7 +208,7 @@ outputs:
       # BEGIN DOCKER SETTINGS
       puppet_config:
         config_volume: horizon
-        puppet_tags: horizon_config
+        puppet_tags: horizon_config,apache
         step_config: |
           include ::tripleo::profile::base::horizon
         config_image: {get_param: ContainerHorizonConfigImage}

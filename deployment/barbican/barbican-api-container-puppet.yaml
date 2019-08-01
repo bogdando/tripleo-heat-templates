@@ -275,7 +275,7 @@ outputs:
       # BEGIN DOCKER SETTINGS
       puppet_config:
         config_volume: barbican
-        puppet_tags: barbican_api_paste_ini,barbican_config
+        puppet_tags: barbican_api_paste_ini,barbican_config,apache
         step_config:
           list_join:
             - "\n"

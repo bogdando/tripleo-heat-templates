@@ -272,7 +272,7 @@ outputs:
       # BEGIN DOCKER SETTINGS
       puppet_config:
         config_volume: swift
-        puppet_tags: swift_config,swift_proxy_config,swift_keymaster_config
+        puppet_tags: swift_config,swift_proxy_config,swift_keymaster_config,apache
         step_config: |
           include ::tripleo::profile::base::swift::proxy
         config_image: {get_param: ContainerSwiftConfigImage}

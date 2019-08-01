@@ -355,7 +355,7 @@ outputs:
       # BEGIN DOCKER SETTINGS
       puppet_config:
         config_volume: neutron
-        puppet_tags: neutron_config,neutron_api_config
+        puppet_tags: neutron_config,neutron_api_config,apache
         step_config:
           list_join:
             - "\n"

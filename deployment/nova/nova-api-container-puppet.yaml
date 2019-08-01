@@ -237,7 +237,7 @@ outputs:
       # BEGIN DOCKER SETTINGS
       puppet_config:
         config_volume: nova
-        puppet_tags: nova_config
+        puppet_tags: nova_config,apache
         step_config:
           list_join:
             - "\n"
