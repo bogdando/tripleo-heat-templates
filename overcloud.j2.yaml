@@ -403,38 +403,69 @@ resources:
       value:
         entries:
           - str_replace:
-              template: IP  HOST
+              template: IP HOST SHORT
               params:
                 IP: {get_attr: [VipMap, net_ip_map, ctlplane]}
                 HOST: {get_param: CloudNameCtlplane}
+                SHORT:
+                  yaql:
+                    expression: &short >
+                      $.data.name.split('.').toSet().difference($.data.domain.split('.').toSet()).join('.')
+                    data:
+                      name: {get_param: CloudNameCtlplane}
+                      domain: {get_param: CloudDomain}
 {%- for network in networks if network.vip|default(false) and network.enabled|default(true) %}
   {%- if network.name == 'External' %}
   # Special case the External hostname param, which is CloudName
           - str_replace:
-              template: IP  HOST
+              template: IP HOST SHORT
               params:
                 IP: {get_attr: [VipMap, net_ip_map, {{network.name_lower}}]}
                 HOST: {get_param: CloudName}
+                SHORT:
+                  yaql:
+                    expression: *short
+                    data:
+                      name: {get_param: CloudName}
+                      domain: {get_param: CloudDomain}
   {%- elif network.name == 'InternalApi' %}
   # Special case the Internal API hostname param, which is CloudNameInternal
           - str_replace:
-              template: IP  HOST
+              template: IP HOST SHORT
               params:
                 IP: {get_attr: [VipMap, net_ip_map, {{network.name_lower}}]}
                 HOST: {get_param: CloudNameInternal}
+                SHORT:
+                  yaql:
+                    expression: *short
+                    data:
+                      name: {get_param: CloudNameInternal}
+                      domain: {get_param: CloudDomain}
   {%- elif network.name == 'StorageMgmt' %}
   # Special case StorageMgmt hostname param, which is CloudNameStorageManagement
           - str_replace:
-              template: IP  HOST
+              template: IP HOST SHORT
               params:
                 IP: {get_attr: [VipMap, net_ip_map, {{network.name_lower}}]}
                 HOST: {get_param: CloudNameStorageManagement}
+                SHORT:
+                  yaql:
+                    expression: *short
+                    data:
+                      name: {get_param: CloudNameStorageManagement}
+                      domain: {get_param: CloudDomain}
   {%- else %}
           - str_replace:
-              template: IP  HOST
+              template: IP HOST SHORT
               params:
                 IP: {get_attr: [VipMap, net_ip_map, {{network.name_lower}}]}
                 HOST: {get_param: CloudName{{network.name}}}
+                SHORT:
+                  yaql:
+                    expression: *short
+                    data:
+                      name: {get_param: CloudName{{network.name}}}
+                      domain: {get_param: CloudDomain}
   {%- endif %}
 {%- endfor %}
 
